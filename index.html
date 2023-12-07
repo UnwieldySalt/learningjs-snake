@@ -4,15 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" type = "text/css" href = "style.css">
+    <link rel="stylesheet" type = "text/css" href = "./style.css">
     <script defer src="javascript.js"></script>
 </head>
-<body>
-    <h1 onload="drawGrid()">Snake Game</h1>
+<body onload="drawGrid()">
+    <h1 class="name-header">Snake Game</h1>
+    <div class="padding">
         <div class="grid" id="draw-grid">
         <!-- <div class="draw-box"></div> * 81 curtsy of js-->
     </div>
-    
+    <div class="flex-button">
+        <button class="button-style1" id="restart-snake">RESTART</button>
+        <button class="button-style1" id="restart-snake">RESTART</button>
+    </div>
+
 <!-- 
     <div class="grid">
         <td class="1">
@@ -24,6 +29,6 @@
     </div>     -->
 
 
-a
+
 </body>
 </html>

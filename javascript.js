@@ -5,14 +5,14 @@ var xSnakePosOld = [4,4,4];
 var ySnakePosOld = [6,7,8];
 
 var xApple = [4];
-var yApple = [3];
+var yApple = [2];
 
 var lost = false;
 
 var xSadFace = [3,5,3,5,2,3,4,5,6];
 var ySadFace = [2,2,3,3,6,5,5,5,6];
 
-var keyInput = 'KeyW';
+var keyInput = '';
 setTimeout(updateSnakeDisplay, 1000);
 
 
@@ -20,17 +20,29 @@ setTimeout(updateSnakeDisplay, 1000);
 
 document.addEventListener('keydown', (event) => 
 {
-    if(event.code == 'KeyW' || event.code == 'KeyA' || event.code == 'KeyS' || event.code == 'KeyD' || event.code == 'KeyQ')
+    if(event.code == 'KeyW' && keyInput != 'KeyS')
     {
-        keyInput = event.code;
+        keyInput = 'KeyW';
+    }
+    else if(event.code == 'KeyA' && keyInput != 'KeyD')
+    {
+        keyInput = 'KeyA';
+    }
+    else if(event.code == 'KeyS' && keyInput != 'KeyW')    
+    {
+        keyInput = 'KeyS';
+    }
+    else if(event.code == 'KeyD' && keyInput != 'KeyA')    
+    {
+        keyInput = 'KeyD';
     }
 });
 
 function updateSnakeDisplay()
 {
     //reset button
-    if(keyInput == 'KeyQ')
-    {
+
+    document.querySelector('#restart-snake') .addEventListener('click', e => { 
         xSnakePos = [4,4,4];
         ySnakePos = [6,7,8];
         xSnakePosOld = [4,4,4];
@@ -41,8 +53,11 @@ function updateSnakeDisplay()
 
         lost = false;
 
-        keyInput = 'KeyW';
-    }
+        keyInput = ''; 
+    }) 
+
+
+
 
     if(!lost)
     {
@@ -51,7 +66,7 @@ function updateSnakeDisplay()
     xSnakePosOld = xSnakePos;
     ySnakePosOld = ySnakePos;
     //sends screen to id of draw-grid
-    document.getElementById("draw-grid").innerHTML = inGrid;
+    //document.getElementById("draw-grid").innerHTML = inGrid;
     //input and direction code
     if(keyInput == 'KeyW')
     {
@@ -81,7 +96,7 @@ function updateSnakeDisplay()
     }
     else
     {
-        for(var selfHarm = 1; selfHarm < xSnakePos.length; selfHarm++)
+        for(var selfHarm = 1; selfHarm < xSnakePos.length-1; selfHarm++)
         {
             if(xSnakePos[0] == xSnakePos[selfHarm] && ySnakePos[0] == ySnakePos[selfHarm])
             {
@@ -91,6 +106,11 @@ function updateSnakeDisplay()
     }
 
     //apple eating and relocation
+    //clears tail
+    if(keyInput != '')
+    {
+        ySnakePos.pop();
+        xSnakePos.pop();
     if(xSnakePos[0] == xApple[0] && ySnakePos[0] == yApple[0])
     {
         xSnakePos.push(xSnakePosOld[xSnakePosOld.length - 1]);
@@ -101,15 +121,22 @@ function updateSnakeDisplay()
         {
             for(var appleSpotAvail = 0; appleSpotAvail < xSnakePos.length; appleSpotAvail++)
             {
-                xApple[0] = Math.round(Math.random() * (8 - 0));
-                yApple[0] = Math.round(Math.random() * (8 - 0));
-                if(xApple[0] != xSnakePos[appleSpotAvail] && yApple[0] != ySnakePos[appleSpotAvail])
+                for(var snakeBodyTest = 0; snakeBodyTest < xSnakePos.length; snakeBodyTest++)
                 {
-                    break;
-                }
+
+                    if(xApple[0] == xSnakePos[snakeBodyTest] && yApple[0] == ySnakePos[snakeBodyTest])
+                    {
+                        xApple[0] = Math.round(Math.random() * (8 - 0));
+                        yApple[0] = Math.round(Math.random() * (8 - 0));
+                        appleSpotAvail = 0;
+                        appleSpotAvail2 = 0;
+                        snakeBodyTest = 0;
+                    }
                 
+                }
             }
         }
+    }
     }
     
     
@@ -121,7 +148,7 @@ function updateSnakeDisplay()
         for(var x = 0; x < 9; x++)
         test1: {
             //prints snake
-            for(var showSnake = 0; showSnake < xSnakePos.length-1; showSnake++)
+            for(var showSnake = 0; showSnake < xSnakePos.length; showSnake++)
             {   
                 if(x == xSnakePos[showSnake] && y == ySnakePos[showSnake])
                 {
@@ -150,9 +177,7 @@ function updateSnakeDisplay()
     document.getElementById("draw-grid").innerHTML = inGrid;
 
     //setTimeout(updateSnakeDisplay, 200);
-    //clears tail
-    ySnakePos.pop();
-    xSnakePos.pop();
+    
     }
 
     if(lost)
